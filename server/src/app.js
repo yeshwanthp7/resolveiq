@@ -27,28 +27,11 @@ export function createApp() {
   // 2. Cookie Parser for secure HttpOnly cookie handling
   app.use(cookieParser());
 
-  // 3. Restricted Credentialed CORS Configuration
-  const isAllowedOrigin = (origin) => {
-    if (!origin) return true;
-    if (env.CLIENT_URL && origin === env.CLIENT_URL) return true;
-    if (process.env.CLIENT_ORIGIN && origin === process.env.CLIENT_ORIGIN) return true;
-    if (origin.endsWith('.vercel.app')) return true;
-    if (['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'].includes(origin)) return true;
-    return false;
-  };
-
+  // 3. Credentialed CORS Configuration (reflects request origin)
   app.use(
     cors({
-      origin: (origin, callback) => {
-        // Allow requests with no origin (curl, mobile, supertest)
-        if (!origin || isAllowedOrigin(origin)) {
-          return callback(null, true);
-        }
-
-        const msg = `CORS Policy Block: Origin ${origin} is not authorized for this API.`;
-        return callback(new Error(msg), false);
-      },
-      credentials: true, // Enables HttpOnly cookie transport across origins
+      origin: true, // Echoes the request origin so all deployed/tunnel origins work with cookies
+      credentials: true,
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-API-Key', 'X-Event-ID', 'Idempotency-Key', 'X-Idempotency-Key'],
     })

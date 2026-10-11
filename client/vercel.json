@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/api/:match*",
+      "destination": "https://hunt-floating-generations-ratings.trycloudflare.com/api/:match*"
+    },
+    {
+      "source": "/socket.io/:match*",
+      "destination": "https://hunt-floating-generations-ratings.trycloudflare.com/socket.io/:match*"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
