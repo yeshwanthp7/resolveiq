@@ -187,7 +187,7 @@ export default function Login() {
           >
             Phase 3 Role Quick-Pick
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem' }}>
+          <div className="form-grid-2col" style={{ gap: '0.5rem' }}>
             <button
               type="button"
               className="btn btn-secondary"

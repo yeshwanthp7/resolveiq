@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { systemApi } from '../../services/api';
-import { LogOut, Activity, Search } from 'lucide-react';
+import { LogOut, Activity, Search, Menu } from 'lucide-react';
 
-export default function Topbar() {
+export default function Topbar({ onToggleSidebar }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [healthStatus, setHealthStatus] = useState('checking');
@@ -56,11 +56,21 @@ export default function Topbar() {
 
   return (
     <header className="app-topbar">
-      {/* Left: Global Quick Filter / Search Trigger */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+      {/* Left: Mobile Menu Toggle & Global Quick Search */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+        <button
+          onClick={onToggleSidebar}
+          className="btn btn-subtle mobile-menu-btn"
+          aria-label="Toggle navigation drawer"
+          title="Open navigation menu"
+          style={{ padding: '0.4rem', borderRadius: 'var(--radius-sm)' }}
+        >
+          <Menu size={20} />
+        </button>
+
         <button
           onClick={() => navigate('/incidents')}
-          className="btn btn-secondary"
+          className="btn btn-secondary topbar-search-btn"
           style={{
             fontSize: '0.8rem',
             padding: '0.35rem 0.65rem',
@@ -70,8 +80,9 @@ export default function Topbar() {
           title="Jump to Incident Triage"
         >
           <Search size={14} />
-          <span>Quick Incident Search</span>
+          <span className="search-text">Quick Search</span>
           <kbd
+            className="desktop-only-kbd"
             style={{
               fontSize: '0.65rem',
               backgroundColor: 'var(--bg-subtle)',
@@ -86,9 +97,10 @@ export default function Topbar() {
       </div>
 
       {/* Right: Connectivity Status & User Session */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         {/* System Health */}
         <div
+          className="topbar-health-indicator"
           style={{
             display: 'flex',
             alignItems: 'center',
@@ -96,7 +108,7 @@ export default function Topbar() {
             fontSize: '0.75rem',
             color: 'var(--text-secondary)',
             borderRight: '1px solid var(--border-neutral)',
-            paddingRight: '1rem',
+            paddingRight: '0.75rem',
           }}
         >
           <div
@@ -131,7 +143,7 @@ export default function Topbar() {
               <span className={`badge ${getRoleBadgeClass(user?.role)}`}>
                 {user?.role || 'Observer'}
               </span>
-              <span style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
+              <span className="desktop-only" style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
                 {user?.team || 'Platform SRE'}
               </span>
             </div>
