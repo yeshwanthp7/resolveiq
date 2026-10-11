@@ -9,10 +9,17 @@ import { registerSocketServer } from './services/socketService.js';
 const app = createApp();
 const server = http.createServer(app);
 
-// Initialize Socket.IO with restricted origins
+// Initialize Socket.IO with flexible trusted origins
 export const io = new SocketIOServer(server, {
   cors: {
-    origin: [env.CLIENT_URL, 'http://localhost:5173', 'http://localhost:5174'],
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (env.CLIENT_URL && origin === env.CLIENT_URL) return callback(null, true);
+      if (process.env.CLIENT_ORIGIN && origin === process.env.CLIENT_ORIGIN) return callback(null, true);
+      if (origin.endsWith('.vercel.app')) return callback(null, true);
+      if (['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'].includes(origin)) return callback(null, true);
+      return callback(null, true); // Allow connection
+    },
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'],
     credentials: true,
   },

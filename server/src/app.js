@@ -25,20 +25,20 @@ export function createApp() {
   app.use(cookieParser());
 
   // 3. Restricted Credentialed CORS Configuration
-  const allowedOrigins = [
-    env.CLIENT_URL,
-    'http://localhost:5173',
-    'http://localhost:5174',
-    'http://localhost:3000',
-  ].filter(Boolean);
+  const isAllowedOrigin = (origin) => {
+    if (!origin) return true;
+    if (env.CLIENT_URL && origin === env.CLIENT_URL) return true;
+    if (process.env.CLIENT_ORIGIN && origin === process.env.CLIENT_ORIGIN) return true;
+    if (origin.endsWith('.vercel.app')) return true;
+    if (['http://localhost:5173', 'http://localhost:5174', 'http://localhost:3000'].includes(origin)) return true;
+    return false;
+  };
 
   app.use(
     cors({
       origin: (origin, callback) => {
         // Allow requests with no origin (curl, mobile, supertest)
-        if (!origin) return callback(null, true);
-
-        if (allowedOrigins.includes(origin)) {
+        if (!origin || isAllowedOrigin(origin)) {
           return callback(null, true);
         }
 
