@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "https://hunt-floating-generations-ratings.trycloudflare.com/api/:match*"
+      "destination": "https://57f88467f07743.lhr.life/api/:match*"
     },
     {
       "source": "/socket.io/:match*",
-      "destination": "https://hunt-floating-generations-ratings.trycloudflare.com/socket.io/:match*"
+      "destination": "https://57f88467f07743.lhr.life/socket.io/:match*"
     },
     {
       "source": "/(.*)",
