@@ -1,0 +1,312 @@
+/**
+ * ==============================================================================
+ * RESOLVEIQ ISOLATED PREVIEW DATASET
+ * ==============================================================================
+ * [PREVIEW DATA NOTICE]
+ * The records below are realistic enterprise sample structures for Phase 1 UI
+ * prototyping and local workflow validation.
+ * They are clearly tagged with [PREVIEW DATA] badges and stored in browser
+ * memory / localStorage. When Phase 2+ backend APIs are connected, these
+ * records will be replaced seamlessly by live MongoDB database queries.
+ * ==============================================================================
+ */
+
+export const PREVIEW_TAG = '[PREVIEW DATA]';
+
+export const INITIAL_PREVIEW_INCIDENTS = [
+  {
+    id: 'inc-1001',
+    incidentNumber: 'INC-1001',
+    title: 'High HTTP 502 Rate on Ingress Gateway during Checkout Surge',
+    description: 'Upstream payment processing pods are throwing connection timeouts. 14% of client requests failing at the edge ingress router.',
+    serviceName: 'ingress-gateway',
+    environment: 'production',
+    impact: 'enterprise',
+    urgency: 'critical',
+    priority: 'P1',
+    status: 'investigating',
+    assignedTeam: 'Edge & CDN',
+    assignedEngineerName: 'SRE Raj Patel',
+    assignedEngineerEmail: 'resolver.raj@resolveiq.io',
+    createdAt: new Date(Date.now() - 38 * 60 * 1000).toISOString(), // 38 mins ago
+    responseDeadline: new Date(Date.now() - 23 * 60 * 1000).toISOString(),
+    resolutionDeadline: new Date(Date.now() + 82 * 60 * 1000).toISOString(),
+    respondedAt: new Date(Date.now() - 28 * 60 * 1000).toISOString(),
+    isResponseBreached: false,
+    isResolutionBreached: false,
+    tags: ['edge', '502-bad-gateway', 'traffic-spike'],
+    aiHypothesis: {
+      hypothesisText: 'Recent Canary rollout of ingress envoy proxy v1.28.3 introduced aggressive socket timeout (500ms) causing cascading drops to slow backend pools.',
+      evidencePoints: [
+        'Deployment dep-4401 occurred 12 minutes prior to first 502 surge.',
+        'Connection queue on payment-service is saturated at 100% capacity.',
+      ],
+      recommendedRunbook: [
+        'Roll back Canary release dep-4401 to ingress v1.28.2.',
+        'Inspect upstream timeout config in envoy-configmap.',
+      ],
+      status: 'pending_review',
+    },
+    auditLogs: [
+      {
+        id: 'aud-1',
+        action: 'INCIDENT_CREATED',
+        actorName: 'Datadog Webhook',
+        timestamp: new Date(Date.now() - 38 * 60 * 1000).toISOString(),
+        reason: 'Automated ingestion from P1 alert rule: Ingress 5xx > 5%',
+      },
+      {
+        id: 'aud-2',
+        action: 'STATUS_TRANSITION',
+        actorName: 'Commander Sarah Chen',
+        timestamp: new Date(Date.now() - 28 * 60 * 1000).toISOString(),
+        reason: 'Acknowledged alert and initiated war room',
+      },
+    ],
+  },
+  {
+    id: 'inc-1002',
+    incidentNumber: 'INC-1002',
+    title: 'Primary MongoDB Replica Set Node Memory Saturation (OOM Spike)',
+    description: 'Node mongo-pri-02 RAM consumption reached 96%. Heavy unindexed query detected on order ledger history table.',
+    serviceName: 'database-cluster',
+    environment: 'production',
+    impact: 'department',
+    urgency: 'critical',
+    priority: 'P2',
+    status: 'acknowledged',
+    assignedTeam: 'Database Ops',
+    assignedEngineerName: 'Admin Alex Rivera',
+    assignedEngineerEmail: 'admin.ops@resolveiq.io',
+    createdAt: new Date(Date.now() - 75 * 60 * 1000).toISOString(),
+    responseDeadline: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+    resolutionDeadline: new Date(Date.now() + 165 * 60 * 1000).toISOString(),
+    respondedAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+    isResponseBreached: false,
+    isResolutionBreached: false,
+    tags: ['mongodb', 'oom', 'unindexed-query'],
+    aiHypothesis: null,
+    auditLogs: [
+      {
+        id: 'aud-3',
+        action: 'INCIDENT_CREATED',
+        actorName: 'Prometheus AlertManager',
+        timestamp: new Date(Date.now() - 75 * 60 * 1000).toISOString(),
+        reason: 'Node memory exceeded 90% threshold for 5m',
+      },
+    ],
+  },
+  {
+    id: 'inc-1003',
+    incidentNumber: 'INC-1003',
+    title: 'JWT Session Token Verification Latency on Identity Gateway',
+    description: 'Average token validation time elevated from 4ms to 180ms due to key rotation cache contention.',
+    serviceName: 'auth-service',
+    environment: 'staging',
+    impact: 'department',
+    urgency: 'moderate',
+    priority: 'P3',
+    status: 'triggered',
+    assignedTeam: 'Identity Service',
+    assignedEngineerName: 'Unassigned',
+    assignedEngineerEmail: null,
+    createdAt: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+    responseDeadline: new Date(Date.now() + 105 * 60 * 1000).toISOString(),
+    resolutionDeadline: new Date(Date.now() + 705 * 60 * 1000).toISOString(),
+    respondedAt: null,
+    isResponseBreached: false,
+    isResolutionBreached: false,
+    tags: ['auth', 'jwt', 'cache-contention'],
+    aiHypothesis: null,
+    auditLogs: [
+      {
+        id: 'aud-4',
+        action: 'INCIDENT_CREATED',
+        actorName: 'APM Synthetic Check',
+        timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+        reason: 'Synthetic auth flow latency P99 > 150ms',
+      },
+    ],
+  },
+  {
+    id: 'inc-1004',
+    incidentNumber: 'INC-1004',
+    title: 'Stripe Webhook Signature Mismatch on Currency Conversion Service',
+    description: 'Payload signature verification rejected 12 events. Secret rotation was completed without reloading worker process pods.',
+    serviceName: 'payments-service',
+    environment: 'production',
+    impact: 'single_user',
+    urgency: 'moderate',
+    priority: 'P4',
+    status: 'resolved',
+    assignedTeam: 'Payments Core',
+    assignedEngineerName: 'SRE Raj Patel',
+    assignedEngineerEmail: 'resolver.raj@resolveiq.io',
+    createdAt: new Date(Date.now() - 360 * 60 * 1000).toISOString(),
+    responseDeadline: new Date(Date.now() - 120 * 60 * 1000).toISOString(),
+    resolutionDeadline: new Date(Date.now() + 1080 * 60 * 1000).toISOString(),
+    respondedAt: new Date(Date.now() - 320 * 60 * 1000).toISOString(),
+    resolvedAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+    isResponseBreached: false,
+    isResolutionBreached: false,
+    tags: ['payments', 'stripe', 'secret-rotation'],
+    aiHypothesis: null,
+    auditLogs: [
+      {
+        id: 'aud-5',
+        action: 'STATUS_TRANSITION',
+        actorName: 'SRE Raj Patel',
+        timestamp: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
+        reason: 'Reloaded Kubernetes secret pods and verified webhook replay.',
+      },
+    ],
+  },
+];
+
+export const PREVIEW_DEPLOYMENTS = [
+  {
+    id: 'dep-4401',
+    serviceName: 'ingress-gateway',
+    environment: 'production',
+    version: 'v1.28.3',
+    commitHash: '8f2a99c',
+    deployedBy: 'ci/cd-github-actions',
+    deployedAt: new Date(Date.now() - 50 * 60 * 1000).toISOString(),
+    status: 'rolled_back',
+    changeSummary: 'Update envoy configuration socket idle timeout parameter.',
+  },
+  {
+    id: 'dep-4400',
+    serviceName: 'database-cluster',
+    environment: 'production',
+    version: 'v4.4.18',
+    commitHash: '1e5b32a',
+    deployedBy: 'admin.ops@resolveiq.io',
+    deployedAt: new Date(Date.now() - 120 * 60 * 1000).toISOString(),
+    status: 'success',
+    changeSummary: 'Apply index migration on order ledger query fields.',
+  },
+  {
+    id: 'dep-4399',
+    serviceName: 'auth-service',
+    environment: 'staging',
+    version: 'v2.1.0-rc2',
+    commitHash: 'c7d891e',
+    deployedBy: 'maya.lin@resolveiq.io',
+    deployedAt: new Date(Date.now() - 180 * 60 * 1000).toISOString(),
+    status: 'success',
+    changeSummary: 'Refactor JWKS public key rotation refresh intervals.',
+  },
+  {
+    id: 'dep-4398',
+    serviceName: 'order-processing',
+    environment: 'production',
+    version: 'v3.12.0',
+    commitHash: '4a0f78b',
+    deployedBy: 'ci/cd-github-actions',
+    deployedAt: new Date(Date.now() - 480 * 60 * 1000).toISOString(),
+    status: 'success',
+    changeSummary: 'Enable concurrent batch queue consumption for cart checkout.',
+  },
+];
+
+export const PREVIEW_KNOWLEDGE_BASE = [
+  {
+    id: 'kb-101',
+    title: 'Runbook: Mitigating Ingress HTTP 502/504 Cascades',
+    service: 'ingress-gateway',
+    category: 'Edge Routing',
+    lastUpdated: '2026-10-01',
+    summary: 'Standard operating procedure for recovering edge proxies during backend socket saturation.',
+    steps: [
+      'Check upstream pod health: kubectl get pods -n production -l app=payment-service',
+      'If Envoy connection queue > 95%, temporarily increase max_connection_queue in configmap',
+      'Roll back latest edge proxy release via ArgoCD if deployed within last 30 minutes',
+      'Verify 5xx rate drops below 0.1% via Datadog live dashboard',
+    ],
+  },
+  {
+    id: 'kb-102',
+    title: 'Runbook: MongoDB Replica Node Failover & OOM Recovery',
+    service: 'database-cluster',
+    category: 'Database Infrastructure',
+    lastUpdated: '2026-09-28',
+    summary: 'Step-by-step diagnostic for identifying rogue long-running aggregation pipelines and stepdown failover.',
+    steps: [
+      'Run db.currentOp() to find unindexed query with op: query and secs_running > 10',
+      'Kill offending operation ID with db.killOp(opId)',
+      'If primary node memory remains pinned > 95%, trigger stepdown: rs.stepDown(60)',
+      'Confirm secondary promotes smoothly without write lock deadlock',
+    ],
+  },
+  {
+    id: 'kb-103',
+    title: 'Runbook: Stripe Webhook Re-Delivery & Signature Validation',
+    service: 'payments-service',
+    category: 'Payment Settlement',
+    lastUpdated: '2026-09-15',
+    summary: 'Handling webhook signature mismatches following API secret rotations.',
+    steps: [
+      'Verify STRIPE_WEBHOOK_SECRET matches the current active secret in Stripe Dashboard',
+      'Perform rolling restart of worker pods: kubectl rollout restart deploy/payment-worker',
+      'In Stripe dashboard, trigger automated batch replay for failed events within the rotation window',
+    ],
+  },
+];
+
+export const PREVIEW_TEAM_WORKLOAD = [
+  {
+    id: 'u-1',
+    name: 'Commander Sarah Chen',
+    email: 'commander.chen@resolveiq.io',
+    role: 'commander',
+    team: 'Core Incident Response',
+    activeIncidents: 1,
+    skills: ['k8s', 'incident-command', 'aws', 'payments'],
+    onCallStatus: 'Primary Lead',
+    availability: 'On-Call Active',
+  },
+  {
+    id: 'u-2',
+    name: 'SRE Raj Patel',
+    email: 'resolver.raj@resolveiq.io',
+    role: 'resolver',
+    team: 'Platform SRE',
+    activeIncidents: 2,
+    skills: ['kubernetes', 'postgres', 'docker', 'networking'],
+    onCallStatus: 'Secondary Escalation',
+    availability: 'Engaged',
+  },
+  {
+    id: 'u-3',
+    name: 'Admin Alex Rivera',
+    email: 'admin.ops@resolveiq.io',
+    role: 'admin',
+    team: 'Database Ops',
+    activeIncidents: 1,
+    skills: ['security', 'mongodb', 'iam', 'infrastructure'],
+    onCallStatus: 'Tier-1 Database',
+    availability: 'Available',
+  },
+  {
+    id: 'u-4',
+    name: 'Observer Jordan Taylor',
+    email: 'observer.taylor@resolveiq.io',
+    role: 'observer',
+    team: 'Compliance & Risk',
+    activeIncidents: 0,
+    skills: ['audit', 'sla-reporting', 'soc2'],
+    onCallStatus: 'Observer',
+    availability: 'Standby',
+  },
+];
+
+export const PREVIEW_CORRELATION_TOPOLOGY = {
+  services: [
+    { id: 'ingress-gateway', name: 'Ingress Gateway', tier: 'tier-1', status: 'degraded', dependencies: ['auth-service', 'payments-service'] },
+    { id: 'auth-service', name: 'Auth Service', tier: 'tier-1', status: 'healthy', dependencies: ['database-cluster'] },
+    { id: 'payments-service', name: 'Payments Service', tier: 'tier-1', status: 'failing', dependencies: ['database-cluster'] },
+    { id: 'order-processing', name: 'Order Processing', tier: 'tier-2', status: 'degraded', dependencies: ['payments-service', 'database-cluster'] },
+    { id: 'database-cluster', name: 'Database Cluster', tier: 'tier-1', status: 'degraded', dependencies: [] },
+  ],
+};

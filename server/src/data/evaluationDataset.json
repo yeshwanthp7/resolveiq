@@ -1,0 +1,374 @@
+{
+  "datasetMetadata": {
+    "name": "ResolveIQ Incident Classification & Duplicate Detection Benchmark Dataset",
+    "version": "1.0",
+    "sampleSizeIncidents": 24,
+    "sampleSizeDuplicatePairs": 16,
+    "description": "Curated ground-truth operational incidents across 6 ITIL categories, 5 priority tiers, and 5 SRE teams, along with positive and negative duplicate incident pairs.",
+    "limitations": "Lexical TF-IDF relies on token overlap; purely conceptual synonyms without vocabulary overlap require hybrid semantic or LLM augmentation. The benchmark size reflects an initial deterministic validation baseline."
+  },
+  "incidents": [
+    {
+      "id": "EVAL-01",
+      "title": "504 Gateway Timeout on Ingress Envoy Edge Pods",
+      "description": "Customer traffic experiencing intermittent 504 gateway timeouts across edge envoy proxy pods with connection pool exhaustion.",
+      "affectedService": "ingress-gateway",
+      "impact": "enterprise",
+      "urgency": "critical",
+      "trueCategory": "availability",
+      "truePriority": "P1",
+      "trueTeam": "Edge & CDN"
+    },
+    {
+      "id": "EVAL-02",
+      "title": "Severe P99 Response Latency Spike on Checkout API",
+      "description": "Checkout service API p99 latency increased from 180ms to 4200ms following high query volume. Users experiencing checkout hangs.",
+      "affectedService": "checkout-service",
+      "impact": "enterprise",
+      "urgency": "moderate",
+      "trueCategory": "latency",
+      "truePriority": "P2",
+      "trueTeam": "Payments Core"
+    },
+    {
+      "id": "EVAL-03",
+      "title": "PostgreSQL Write Replica Replication Lag Exceeding 180s",
+      "description": "Database replica replication stream lag exceeded 180 seconds. Read traffic serving stale order snapshots.",
+      "affectedService": "postgresql-primary",
+      "impact": "department",
+      "urgency": "critical",
+      "trueCategory": "availability",
+      "truePriority": "P2",
+      "trueTeam": "Database Ops"
+    },
+    {
+      "id": "EVAL-04",
+      "title": "Duplicate Ledger Billing Entries Detected After Stripe Webhook Retry",
+      "description": "Financial ledger recorded duplicate transaction entries due to idempotent key mismatch during webhook redelivery.",
+      "affectedService": "billing-service",
+      "impact": "department",
+      "urgency": "moderate",
+      "trueCategory": "data_integrity",
+      "truePriority": "P3",
+      "trueTeam": "Payments Core"
+    },
+    {
+      "id": "EVAL-05",
+      "title": "Unauthorized 401 Tokens on IAM OAuth2 Provider",
+      "description": "JWT signature verification failing across microservices due to expired public key rotation in IAM keycloak cluster.",
+      "affectedService": "iam-service",
+      "impact": "enterprise",
+      "urgency": "critical",
+      "trueCategory": "security",
+      "truePriority": "P1",
+      "trueTeam": "Identity Service"
+    },
+    {
+      "id": "EVAL-06",
+      "title": "Kubernetes Worker Node Disk Pressure and Pod Eviction",
+      "description": "Worker node k8s-worker-09 reported disk full on root filesystem. Container runtime evicting pods.",
+      "affectedService": "k8s-cluster",
+      "impact": "department",
+      "urgency": "low",
+      "trueCategory": "infrastructure",
+      "truePriority": "P4",
+      "trueTeam": "Platform SRE"
+    },
+    {
+      "id": "EVAL-07",
+      "title": "Failed Helm Release Rollout on Core API Pods",
+      "description": "Deployment pipeline failed during rollout v2.4.1 due to invalid container image tag in deployment manifest.",
+      "affectedService": "core-api",
+      "impact": "department",
+      "urgency": "moderate",
+      "trueCategory": "deployment",
+      "truePriority": "P3",
+      "trueTeam": "Platform SRE"
+    },
+    {
+      "id": "EVAL-08",
+      "title": "Redis Cache Cluster Node Outage and Eviction Spike",
+      "description": "Redis master node crashed unexpectedly with OOM error. Cache misses overloading primary database.",
+      "affectedService": "redis-cache",
+      "impact": "department",
+      "urgency": "critical",
+      "trueCategory": "availability",
+      "truePriority": "P2",
+      "trueTeam": "Database Ops"
+    },
+    {
+      "id": "EVAL-09",
+      "title": "Elevated API Latency Due to Unindexed Mongo Query",
+      "description": "Slow query logs indicate full collection scans on orders collection leading to sluggish response times.",
+      "affectedService": "mongodb-cluster",
+      "impact": "single_user",
+      "urgency": "moderate",
+      "trueCategory": "latency",
+      "truePriority": "P4",
+      "trueTeam": "Database Ops"
+    },
+    {
+      "id": "EVAL-10",
+      "title": "Checksum Mismatch on Nightly S3 Parquet Data Sync",
+      "description": "Nightly data warehouse sync identified checksum divergence and missing records between primary and analytical tables.",
+      "affectedService": "ledger-sync",
+      "impact": "single_user",
+      "urgency": "low",
+      "trueCategory": "data_integrity",
+      "truePriority": "P5",
+      "trueTeam": "Payments Core"
+    },
+    {
+      "id": "EVAL-11",
+      "title": "Expired SSL Certificate on Edge CDN Ingress Domain",
+      "description": "Browsers warning of expired SSL certificate on public edge cdn endpoint api.resolveiq.io.",
+      "affectedService": "cloudflare-edge",
+      "impact": "enterprise",
+      "urgency": "critical",
+      "trueCategory": "security",
+      "truePriority": "P1",
+      "trueTeam": "Edge & CDN"
+    },
+    {
+      "id": "EVAL-12",
+      "title": "High CPU Throttle on Kubernetes DaemonSet Monitoring Agent",
+      "description": "Prometheus node-exporter consuming excessive CPU cycles causing node-level scheduling contention.",
+      "affectedService": "k8s-node-exporter",
+      "impact": "single_user",
+      "urgency": "low",
+      "trueCategory": "infrastructure",
+      "truePriority": "P5",
+      "trueTeam": "Platform SRE"
+    },
+    {
+      "id": "EVAL-13",
+      "title": "Cloudflare CDN Cache Purge Pipeline 502 Bad Gateway",
+      "description": "Automated deployment cache invalidator receiving 502 bad gateway from cloudflare management API.",
+      "affectedService": "cdn-cache-purger",
+      "impact": "department",
+      "urgency": "low",
+      "trueCategory": "availability",
+      "truePriority": "P4",
+      "trueTeam": "Edge & CDN"
+    },
+    {
+      "id": "EVAL-14",
+      "title": "Payment Card Token Decryption Service Latency Degradation",
+      "description": "Card tokenization decrypt RPC endpoint experiencing 3500ms p95 latency under high concurrency.",
+      "affectedService": "stripe-gateway",
+      "impact": "department",
+      "urgency": "critical",
+      "trueCategory": "latency",
+      "truePriority": "P2",
+      "trueTeam": "Payments Core"
+    },
+    {
+      "id": "EVAL-15",
+      "title": "Session Store Invalidation Causing 403 Forbidden Access Errors",
+      "description": "Redis session store cluster evictions invalidating active responder tokens resulting in 403 forbidden.",
+      "affectedService": "session-store",
+      "impact": "department",
+      "urgency": "critical",
+      "trueCategory": "security",
+      "truePriority": "P2",
+      "trueTeam": "Identity Service"
+    },
+    {
+      "id": "EVAL-16",
+      "title": "Database Connection Pool Starvation on Postgres Cluster",
+      "description": "Application servers exhausted max_connections on primary postgres database leading to connection timeouts.",
+      "affectedService": "postgresql-primary",
+      "impact": "enterprise",
+      "urgency": "critical",
+      "trueCategory": "availability",
+      "truePriority": "P1",
+      "trueTeam": "Database Ops"
+    },
+    {
+      "id": "EVAL-17",
+      "title": "Rollback Triggered by Automated Canary Analysis on Ingress Envoy",
+      "description": "Canary deployment v3.2.0 automated rollback triggered after canary pods recorded 1.5% error rate.",
+      "affectedService": "envoy-canary",
+      "impact": "department",
+      "urgency": "low",
+      "trueCategory": "deployment",
+      "truePriority": "P4",
+      "trueTeam": "Edge & CDN"
+    },
+    {
+      "id": "EVAL-18",
+      "title": "Corrupt User Profile Table Indices Following Migration Script",
+      "description": "Database migration v44 created corrupted index entries causing query crashes and data inconsistency.",
+      "affectedService": "database-migration",
+      "impact": "enterprise",
+      "urgency": "moderate",
+      "trueCategory": "data_integrity",
+      "truePriority": "P2",
+      "trueTeam": "Database Ops"
+    },
+    {
+      "id": "EVAL-19",
+      "title": "Network Packet Drop Spike on Kubernetes Calico CNI",
+      "description": "Calico CNI iptables lock contention causing 12% packet drop rate between microservice pods.",
+      "affectedService": "k8s-cluster",
+      "impact": "department",
+      "urgency": "moderate",
+      "trueCategory": "infrastructure",
+      "truePriority": "P3",
+      "trueTeam": "Platform SRE"
+    },
+    {
+      "id": "EVAL-20",
+      "title": "Service Mesh Envoy Sidecar Outage on Billing Namespace",
+      "description": "Istio envoy sidecar proxies crashed on billing pods resulting in complete service outage.",
+      "affectedService": "service-mesh",
+      "impact": "enterprise",
+      "urgency": "critical",
+      "trueCategory": "availability",
+      "truePriority": "P1",
+      "trueTeam": "Platform SRE"
+    },
+    {
+      "id": "EVAL-21",
+      "title": "Slow Payment Webhook Acknowledgement Latency",
+      "description": "Webhook notification dispatcher lagging by 45 seconds causing partner retry storms.",
+      "affectedService": "payments-api",
+      "impact": "single_user",
+      "urgency": "critical",
+      "trueCategory": "latency",
+      "truePriority": "P4",
+      "trueTeam": "Payments Core"
+    },
+    {
+      "id": "EVAL-22",
+      "title": "Continuous Deployment Helm Chart Release Failure",
+      "description": "ArgoCD synchronization failed on payments service due to invalid k8s resource schema.",
+      "affectedService": "payments-api",
+      "impact": "single_user",
+      "urgency": "moderate",
+      "trueCategory": "deployment",
+      "truePriority": "P4",
+      "trueTeam": "Payments Core"
+    },
+    {
+      "id": "EVAL-23",
+      "title": "Credential Leak Warning on Internal Logging Elastic Cluster",
+      "description": "Debug log aggregator observed logging plaintext bearer tokens in access log streams.",
+      "affectedService": "auth-service",
+      "impact": "enterprise",
+      "urgency": "critical",
+      "trueCategory": "security",
+      "truePriority": "P1",
+      "trueTeam": "Identity Service"
+    },
+    {
+      "id": "EVAL-24",
+      "title": "Storage Volume EBS IOPS Exhaustion on Database Host",
+      "description": "AWS EBS gp3 storage volume throttled at burst IOPS limit causing severe filesystem lock contention.",
+      "affectedService": "mongodb-cluster",
+      "impact": "department",
+      "urgency": "critical",
+      "trueCategory": "infrastructure",
+      "truePriority": "P2",
+      "trueTeam": "Database Ops"
+    }
+  ],
+  "duplicatePairs": [
+    {
+      "pairId": "PAIR-01",
+      "isDuplicate": true,
+      "docA": "504 Gateway Timeout on Ingress Envoy Edge Pods. Customer traffic dropping intermittently with Envoy upstream timeout spikes.",
+      "docB": "Envoy Ingress Proxy 504 Timeouts. Upstream connection timeout spikes observed on edge ingress gateway pods."
+    },
+    {
+      "pairId": "PAIR-02",
+      "isDuplicate": true,
+      "docA": "PostgreSQL Write Replica Replication Lag Exceeding 180s. Database replica replication stream lag exceeded 180 seconds.",
+      "docB": "Streaming Replication Delay on Postgres Replica. Replication stream delay over 180s causing stale read queries."
+    },
+    {
+      "pairId": "PAIR-03",
+      "isDuplicate": true,
+      "docA": "Severe P99 Response Latency Spike on Checkout API. Checkout service API p99 latency increased from 180ms to 4200ms.",
+      "docB": "Checkout Service High P99 Latency. Customer checkout endpoint response time degraded to over 4 seconds."
+    },
+    {
+      "pairId": "PAIR-04",
+      "isDuplicate": true,
+      "docA": "Kubernetes Worker Node Disk Pressure and Pod Eviction. Worker node k8s-worker-09 reported disk full on root filesystem.",
+      "docB": "Disk Full on K8s Node Root Filesystem. Root disk volume exhausted on k8s-worker-09 leading to pod evictions."
+    },
+    {
+      "pairId": "PAIR-05",
+      "isDuplicate": true,
+      "docA": "Expired SSL Certificate on Edge CDN Ingress Domain. Browsers warning of expired SSL certificate on public edge cdn endpoint api.resolveiq.io.",
+      "docB": "SSL TLS Certificate Expiration Alert on Edge CDN. api.resolveiq.io TLS certificate expired causing browser security warnings."
+    },
+    {
+      "pairId": "PAIR-06",
+      "isDuplicate": true,
+      "docA": "Duplicate Ledger Billing Entries Detected After Stripe Webhook Retry. Financial ledger recorded duplicate transaction entries due to idempotent key mismatch.",
+      "docB": "Stripe Webhook Duplicate Transactions in Billing Ledger. Idempotent key failure causing repeated financial charges in ledger."
+    },
+    {
+      "pairId": "PAIR-07",
+      "isDuplicate": true,
+      "docA": "Redis Cache Cluster Node Outage and Eviction Spike. Redis master node crashed unexpectedly with OOM error.",
+      "docB": "Redis Master Node OOM Crash Outage. Primary redis cache instance died from out of memory error."
+    },
+    {
+      "pairId": "PAIR-08",
+      "isDuplicate": true,
+      "docA": "Unauthorized 401 Tokens on IAM OAuth2 Provider. JWT signature verification failing across microservices due to expired public key rotation.",
+      "docB": "IAM OAuth2 Service Returning 401 Unauthorized Tokens. Key rotation failure causing invalid JWT signature rejections."
+    },
+    {
+      "pairId": "PAIR-09",
+      "isDuplicate": false,
+      "docA": "504 Gateway Timeout on Ingress Envoy Edge Pods. Customer traffic dropping intermittently with Envoy upstream timeout spikes.",
+      "docB": "PostgreSQL Write Replica Replication Lag Exceeding 180s. Database replica replication stream lag exceeded 180 seconds."
+    },
+    {
+      "pairId": "PAIR-10",
+      "isDuplicate": false,
+      "docA": "Severe P99 Response Latency Spike on Checkout API. Checkout service API p99 latency increased from 180ms to 4200ms.",
+      "docB": "Kubernetes Worker Node Disk Pressure and Pod Eviction. Worker node k8s-worker-09 reported disk full on root filesystem."
+    },
+    {
+      "pairId": "PAIR-11",
+      "isDuplicate": false,
+      "docA": "Expired SSL Certificate on Edge CDN Ingress Domain. Browsers warning of expired SSL certificate on public edge cdn endpoint api.resolveiq.io.",
+      "docB": "Failed Helm Release Rollout on Core API Pods. Deployment pipeline failed during rollout v2.4.1 due to invalid container image tag."
+    },
+    {
+      "pairId": "PAIR-12",
+      "isDuplicate": false,
+      "docA": "Duplicate Ledger Billing Entries Detected After Stripe Webhook Retry. Financial ledger recorded duplicate transaction entries.",
+      "docB": "Database Connection Pool Starvation on Postgres Cluster. Application servers exhausted max_connections on primary postgres database."
+    },
+    {
+      "pairId": "PAIR-13",
+      "isDuplicate": false,
+      "docA": "Redis Cache Cluster Node Outage and Eviction Spike. Redis master node crashed unexpectedly with OOM error.",
+      "docB": "Continuous Deployment Helm Chart Release Failure. ArgoCD synchronization failed on payments service."
+    },
+    {
+      "pairId": "PAIR-14",
+      "isDuplicate": false,
+      "docA": "Unauthorized 401 Tokens on IAM OAuth2 Provider. JWT signature verification failing across microservices.",
+      "docB": "Elevated API Latency Due to Unindexed Mongo Query. Slow query logs indicate full collection scans on orders collection."
+    },
+    {
+      "pairId": "PAIR-15",
+      "isDuplicate": false,
+      "docA": "Storage Volume EBS IOPS Exhaustion on Database Host. AWS EBS gp3 storage volume throttled at burst IOPS limit.",
+      "docB": "Service Mesh Envoy Sidecar Outage on Billing Namespace. Istio envoy sidecar proxies crashed on billing pods."
+    },
+    {
+      "pairId": "PAIR-16",
+      "isDuplicate": false,
+      "docA": "Checksum Mismatch on Nightly S3 Parquet Data Sync. Nightly data warehouse sync identified checksum divergence.",
+      "docB": "Credential Leak Warning on Internal Logging Elastic Cluster. Debug log aggregator observed logging plaintext bearer tokens."
+    }
+  ]
+}
