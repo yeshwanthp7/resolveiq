@@ -1,4 +1,7 @@
 import express from 'express';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { env } from './config/env.js';
@@ -71,7 +74,22 @@ export function createApp() {
   app.use('/api/v1/deployments', deploymentRoutes);
   app.use('/api/v1/correlations', correlationRoutes);
 
-  // 7. Catch-All 404 Handler
+  // 7. Static Asset Serving & Client Single Page App Routing
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+  const clientDistPath = path.resolve(__dirname, '../../client/dist');
+
+  if (fs.existsSync(clientDistPath)) {
+    app.use(express.static(clientDistPath));
+    app.get('*', (req, res, next) => {
+      if (req.originalUrl.startsWith('/api')) {
+        return next();
+      }
+      res.sendFile(path.join(clientDistPath, 'index.html'));
+    });
+  }
+
+  // 8. Catch-All 404 Handler for API
   app.use('*', (req, res) => {
     res.status(404).json({
       success: false,
@@ -79,7 +97,7 @@ export function createApp() {
     });
   });
 
-  // 8. Centralized Error Middleware
+  // 9. Centralized Error Middleware
   app.use(errorHandler);
 
   return app;
