@@ -26,7 +26,6 @@ const incidentSchema = new mongoose.Schema(
     },
     reporter: {
       type: mongoose.Schema.Types.Mixed,
-      ref: 'User',
       default: 'System Monitoring',
     },
     affectedService: {

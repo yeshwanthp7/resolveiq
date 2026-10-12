@@ -171,7 +171,6 @@ export async function getIncidents(req, res, next) {
 
     const queryBuilder = Incident.find(filter)
       .populate('assignee', 'name email role team activeIncidentCount')
-      .populate('reporter', 'name email role team')
       .sort({ createdAt: -1 });
 
     if (page || (limit && limit !== 'all')) {
@@ -179,6 +178,24 @@ export async function getIncidents(req, res, next) {
     }
 
     const incidents = await queryBuilder;
+
+    // Safely populate reporters without failing on string values (e.g. 'System Monitoring')
+    const reporterIds = incidents
+      .map((inc) => inc.reporter)
+      .filter((r) => r && mongoose.isValidObjectId(r));
+
+    if (reporterIds.length > 0) {
+      const users = await User.find({ _id: { $in: reporterIds } })
+        .select('name email role team')
+        .lean();
+      const userMap = new Map(users.map((u) => [u._id.toString(), u]));
+      incidents.forEach((inc) => {
+        if (inc.reporter && mongoose.isValidObjectId(inc.reporter)) {
+          const u = userMap.get(inc.reporter.toString());
+          if (u) inc.reporter = u;
+        }
+      });
+    }
 
     res.status(200).json({
       success: true,
@@ -203,7 +220,6 @@ export async function getIncidentById(req, res, next) {
 
     const incident = await Incident.findOne(query)
       .populate('assignee', 'name email role team activeIncidentCount')
-      .populate('reporter', 'name email role team')
       .populate('relatedIncidents', 'incidentNumber title priority status affectedService assignedTeam');
 
     if (!incident) {
