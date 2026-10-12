@@ -2,11 +2,11 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "https://57f88467f07743.lhr.life/api/:match*"
+      "destination": "https://crew-exec-speed-exceptional.trycloudflare.com/api/:match*"
     },
     {
       "source": "/socket.io/:match*",
-      "destination": "https://57f88467f07743.lhr.life/socket.io/:match*"
+      "destination": "https://crew-exec-speed-exceptional.trycloudflare.com/socket.io/:match*"
     },
     {
       "source": "/(.*)",
